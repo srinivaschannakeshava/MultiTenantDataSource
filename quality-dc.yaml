@@ -1,0 +1,47 @@
+version: "3.3"
+services:
+   
+  postgresql:
+     image: 'bitnami/postgresql:latest'
+     container_name: postgresql
+     environment:
+      - ALLOW_EMPTY_PASSWORD=yes
+      - POSTGRESQL_USER=srini91
+      - POSTGRESQL_DATABASE=sonarqube
+      - POSTGRESQL_PASSWORD=srini91
+     volumes:
+      - "D:/Learnings/sts-workspace/MultiTenantDataSource/db/postgresql:/bitnami/postgresql"
+     networks:
+       - sonarqubeNet
+
+  sonarqube:
+     image: bitnami/sonarqube:7.9.5
+     container_name: sonarqube
+     depends_on:
+       - postgresql
+     ports:
+       - 8888:9000
+     environment:
+       - SONARQUBE_DATABASE_USER=srini91
+       - SONARQUBE_DATABASE_NAME=sonarqube
+       - SONARQUBE_DATABASE_PASSWORD=srini91
+       - ALLOW_EMPTY_PASSWORD=yes
+      #  - POSTGRESQL_HOST=postgresql
+      #  - POSTGRESQL_PORT_NUMBER=5432
+      #  - SONARQUBE_ELASTICSEARCH_JAVA_ADD_OPTS="-Dnode.store.allow_mmapfs=false"
+     volumes:
+       - "D:/Learnings/sts-workspace/MultiTenantDataSource/db/sonarqube:/bitnami"
+     networks:
+       - sonarqubeNet
+
+      #  tail -f /opt/bitnami/sonarqube/logs/sonar.log -n 100
+
+
+#-----------------------------------------------#     
+networks: 
+  sonarqubeNet:
+    driver: bridge
+#--------------------------------------------------#
+  
+   
+   
