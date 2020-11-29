@@ -3,6 +3,12 @@ server:
 spring:
   application:
     name: MULTI-DATASOURCE-APP
+
+  jpa:
+    hibernate:
+      ddl-auto: update
+
+
 default-db: db1
 datasource:
   configs:
