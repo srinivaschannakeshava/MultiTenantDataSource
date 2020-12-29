@@ -1,0 +1,80 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  labels:
+    app: postgresql
+  name: postgresql-deployment
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: postgresql
+  strategy:
+    type: Recreate
+  template:
+    metadata:
+      labels:
+        app: postgresql
+    spec:
+      containers:
+      - env:
+        - name: ALLOW_EMPTY_PASSWORD
+          value: "yes"
+        - name: POSTGRESQL_DATABASE
+          value: sonarqube
+        - name: POSTGRESQL_PASSWORD
+          value: srini91
+        - name: POSTGRESQL_USER
+          value: srini91
+        image: bitnami/postgresql:latest
+        imagePullPolicy: ""
+        name: postgresql
+        resources: {}
+        volumeMounts:
+        - mountPath: /bitnami/postgresql
+          name: data-volume
+      restartPolicy: Always
+      serviceAccountName: ""
+      volumes:
+      - name: data-volume
+        persistentVolumeClaim:
+          claimName: data-volume
+status: {}
+
+---
+
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  labels:
+    app: postgresql
+    name: data-volume
+  name: data-volume
+spec:
+  accessModes:
+  - ReadWriteOnce
+  resources:
+    requests:
+      storage: 1Gi
+status: {}
+
+---
+
+---
+
+apiVersion: v1
+kind: Service
+metadata:
+  labels:
+    service: postgresql
+    app: postgresql
+  name: postgresql
+spec:
+  ports:
+  - name: "5432"
+    port: 5432
+    targetPort: 5432
+  selector:
+    app: postgresql
+status:
+  loadBalancer: {}

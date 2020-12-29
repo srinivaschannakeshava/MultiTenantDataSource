@@ -1,0 +1,85 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  labels:
+    app: sonarqube
+  name: sonarqube-deployment
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: sonarqube
+  strategy:
+    type: Recreate
+  template:
+    metadata:
+      labels:
+        app: sonarqube
+    spec:
+      containers:
+      - env:
+        - name: ALLOW_EMPTY_PASSWORD
+          value: "yes"
+        - name: SONARQUBE_DATABASE_NAME
+          value: sonarqube
+        - name: SONARQUBE_DATABASE_PASSWORD
+          value: srini91
+        - name: SONARQUBE_DATABASE_USER
+          value: srini91
+        image: bitnami/sonarqube:7.9.5
+        imagePullPolicy: ""
+        name: sonarqube
+        
+        ports:
+        - containerPort: 9000
+        resources: {}
+        volumeMounts:
+        - mountPath: /bitnami
+          name: data-volume
+      restartPolicy: Always
+      serviceAccountName: ""
+      volumes:
+      - name: data-volume
+        persistentVolumeClaim:
+          claimName: data-volume
+status: {}
+
+---
+
+apiVersion: v1
+kind: Service
+metadata:
+  labels:
+    app: sonarqube
+  name: sonarqube-lb
+spec:
+  type: LoadBalancer
+  ports:
+  - name: "8888"
+    port: 8888
+    targetPort: 9000
+  selector:
+    app: sonarqube
+status:
+  loadBalancer: {}
+  
+---
+
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  labels:
+    app: sonarqube
+    name: data-volume
+  name: data-volume
+spec:
+  accessModes:
+  - ReadWriteOnce
+  resources:
+    requests:
+      storage: 1Gi
+status: {}
+
+---
+
+#cat /opt/bitnami/sonarqube/logs/sonar.log 
