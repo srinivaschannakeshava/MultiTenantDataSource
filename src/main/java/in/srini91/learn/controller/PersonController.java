@@ -11,8 +11,10 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import in.srini91.learn.config.aspect.LogPerformance;
 import in.srini91.learn.dao.model.Person;
 import in.srini91.learn.dao.repo.PersonRepository;
+import in.srini91.learn.service.PersonService;
 
 @RestController
 @RequestMapping(path = "person")
@@ -21,7 +23,11 @@ public class PersonController {
 	@Autowired
 	private PersonRepository pRepo;
 
+	@Autowired
+	private PersonService pService;
+
 	@GetMapping
+	@LogPerformance
 	public List<Person> getPersonList() {
 		return pRepo.findAll();
 	}
@@ -32,8 +38,9 @@ public class PersonController {
 	}
 
 	@GetMapping(path = "{id}")
+	@LogPerformance
 	public Person getPersonById(@PathVariable(name = "id", required = true) Integer id) {
-		return pRepo.getOne(id);
+		return pService.getPersonById(id);
 	}
 
 	@DeleteMapping(path = "{id}")

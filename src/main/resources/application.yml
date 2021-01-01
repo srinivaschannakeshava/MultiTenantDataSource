@@ -3,6 +3,9 @@ server:
 spring:
   application:
     name: MULTI-DATASOURCE-APP
+  cache:
+    jcache:
+      config: classpath:ehcache.xml
 
   jpa:
     hibernate:
