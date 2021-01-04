@@ -14,6 +14,7 @@ public class FlightAspect {
 
 	@DeclareParents(value = "in.srini91.learn.aop.introductions.Flight", defaultImpl = FlyerImpl.class)
 	private Flyer flyer;
+
 	@DeclareParents(value = "in.srini91.learn.aop.introductions.Flight", defaultImpl = FlyerImpl.class)
 	private Flyer2 flyer2;
 
