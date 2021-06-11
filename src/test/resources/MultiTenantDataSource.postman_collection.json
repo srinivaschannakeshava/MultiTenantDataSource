@@ -1,0 +1,112 @@
+{
+	"info": {
+		"_postman_id": "7490ae8d-1b51-45c1-a0b0-90fa0bf8609b",
+		"name": "MultiTenantDataSource",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+	},
+	"item": [
+		{
+			"name": "get all persons",
+			"request": {
+				"method": "GET",
+				"header": [
+					{
+						"key": "X-DB",
+						"value": "db1",
+						"type": "text"
+					}
+				],
+				"url": {
+					"raw": "localhost:8081/person",
+					"host": [
+						"localhost"
+					],
+					"port": "8081",
+					"path": [
+						"person"
+					],
+					"query": [
+						{
+							"key": "X-DB",
+							"value": "db1",
+							"disabled": true
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "addnew person",
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "X-DB",
+						"value": "db1",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n \"name\":\"kavya\",\r\n \"age\":31,\r\n \"country\":\"IN\"\r\n\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "localhost:8081/person",
+					"host": [
+						"localhost"
+					],
+					"port": "8081",
+					"path": [
+						"person"
+					],
+					"query": [
+						{
+							"key": "X-DB",
+							"value": "db2",
+							"disabled": true
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Get Individual person",
+			"request": {
+				"method": "GET",
+				"header": [
+					{
+						"key": "X-DB",
+						"value": "db1",
+						"type": "text"
+					}
+				],
+				"url": {
+					"raw": "localhost:8081/person/1",
+					"host": [
+						"localhost"
+					],
+					"port": "8081",
+					"path": [
+						"person",
+						"1"
+					],
+					"query": [
+						{
+							"key": "X-DB",
+							"value": "db1",
+							"disabled": true
+						}
+					]
+				}
+			},
+			"response": []
+		}
+	]
+}
