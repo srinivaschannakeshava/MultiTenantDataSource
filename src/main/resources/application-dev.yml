@@ -1,0 +1,39 @@
+server:
+  port: 8081
+spring:
+  application:
+    name: MULTI-DATASOURCE-APP
+  cache:
+    jcache:
+      config: classpath:ehcache.xml
+
+  jpa:
+    hibernate:
+      ddl-auto: update
+
+
+default-db: db1
+datasource:
+  configs:
+    db1:
+      jdbcUrl: jdbc:h2:tcp://localhost:1521/test
+      driverClassName: org.h2.Driver
+      username: sa
+      password:
+      maximumPoolSize: 5
+#      minIdle: 1
+      idleTimeout: 300000
+      maxLifetime: 1200000
+#      auto-commit: true
+
+    db2:
+      jdbcUrl: jdbc:h2:tcp://localhost:1522/test
+      driverClassName: org.h2.Driver
+      username: sa
+      password:
+      maximumPoolSize: 5
+#      minIdle: 1
+      idleTimeout: 300000
+      maxLifetime: 1200000
+#      auto-commit: true
+

@@ -1,7 +1,12 @@
 package in.srini91.learn.controller;
 
+import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
+import javax.validation.Valid;
+
+import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -14,6 +19,8 @@ import org.springframework.web.bind.annotation.RestController;
 import in.srini91.learn.config.aspect.LogPerformance;
 import in.srini91.learn.dao.model.Person;
 import in.srini91.learn.dao.repo.PersonRepository;
+import in.srini91.learn.model.mappers.PersonConverter;
+import in.srini91.learn.resp.model.PersonDTO;
 import in.srini91.learn.service.PersonService;
 
 @RestController
@@ -25,15 +32,28 @@ public class PersonController {
 
 	@Autowired
 	private PersonService pService;
+	
+	@Autowired
+	private PersonConverter pConvert;
+	
+	@Autowired
+	private ModelMapper modelMapper;
 
 	@GetMapping
 	@LogPerformance
-	public List<Person> getPersonList() {
-		return pRepo.findAll();
+	public List<PersonDTO> getPersonList() {
+//	public List<Person> getPersonList() {
+//		ArrayList<PersonDTO> personDtoList = new ArrayList<PersonDTO>();
+		List<Person> findAll = pRepo.findAll();
+		return findAll.stream().map(p->modelMapper.map(p, PersonDTO.class)).collect(Collectors.toList());
+//		modelMapper.map(findAll, personDtoList);
+//		return personDtoList;
+//		return findAll;
+//		return pConvert.convertList(pRepo.findAll());
 	}
 
 	@PostMapping
-	public Person savePerson(@RequestBody Person person) {
+	public Person savePerson(@Valid @RequestBody Person person) {
 		return pRepo.save(person);
 	}
 

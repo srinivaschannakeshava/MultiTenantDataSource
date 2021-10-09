@@ -5,6 +5,8 @@ import java.io.Serializable;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
+import javax.validation.constraints.Min;
+import javax.validation.constraints.NotBlank;
 
 import lombok.Data;
 
@@ -21,9 +23,11 @@ public class Person implements Serializable {
 	@GeneratedValue
 	private Integer id;
 
+	@NotBlank
 	private String name;
 
 	private Integer age;
 
+	@NotBlank
 	private String country;
 }

@@ -9,7 +9,7 @@ services:
       - 1521:1521
       - 81:81
      volumes: 
-      - "D:/Learnings/sts-workspace/MultiTenantDataSource/db/h2-db1:/opt/h2-data"
+      - "C:/work/learning/MultiTenantDataSource/db/h2-db1:/opt/h2-data"
      networks: 
       - dbnet
 
@@ -21,7 +21,7 @@ services:
       - 1522:1521
       - 82:81
      volumes: 
-      - "D:/Learnings/sts-workspace/MultiTenantDataSource/db/h2-db2:/opt/h2-data"
+      - "C:/work/learning/MultiTenantDataSource/db/h2-db2:/opt/h2-data"
      networks: 
       - dbnet
 

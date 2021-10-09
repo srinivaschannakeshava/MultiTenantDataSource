@@ -1,5 +1,9 @@
 package in.srini91.learn.config.aspect;
 
+import java.util.concurrent.TimeUnit;
+
+import javax.annotation.PostConstruct;
+
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.aspectj.lang.JoinPoint;
@@ -11,6 +15,7 @@ import org.aspectj.lang.annotation.Aspect;
 import org.aspectj.lang.annotation.Before;
 import org.aspectj.lang.annotation.Pointcut;
 import org.aspectj.lang.reflect.MethodSignature;
+import org.springframework.context.annotation.Profile;
 import org.springframework.core.annotation.Order;
 import org.springframework.stereotype.Service;
 import org.springframework.util.StopWatch;
@@ -18,8 +23,11 @@ import org.springframework.util.StopWatch;
 @Aspect
 @Service
 @Order(2)
+//@Profile("dev")
 public class LoggingAspect {
 	private static Logger LOG = LogManager.getLogger(LoggingAspect.class);
+	private StopWatch watch ;
+
 
 	@Before("execution (* in.srini91.learn..*(..))")
 	public void beforeExec(JoinPoint jp) {
@@ -56,15 +64,24 @@ public class LoggingAspect {
 	@Around("@annotation(in.srini91.learn.config.aspect.LogPerformance)")
 	public Object aroundTheMethod(ProceedingJoinPoint pjp) throws Throwable {
 		MethodSignature sig = (MethodSignature) pjp.getSignature();
-		String className = sig.getDeclaringType().getName();
+		String className = sig.getDeclaringType().getSimpleName();
 		String methodName = sig.getName();
-		StopWatch watch = new StopWatch();
+		watch.setKeepTaskList(false);
 		watch.start();
 		Object result = pjp.proceed();
 		watch.stop();
-		LOG.info("Execution Time of : " + className + " : method : " + methodName + " :: " + watch.getTotalTimeMillis()
-				+ " ms :: seconds = " + watch.getTotalTimeSeconds());
+		long lastTaskTimeMillis = watch.getLastTaskTimeMillis();
+		LOG.info("Execution Time of : " + className + " : method : " + methodName + " :: " + lastTaskTimeMillis
+				+ " ms :: seconds :: " + ((double)lastTaskTimeMillis/1000));
 		return result;
 	}
+	
+	
+	@PostConstruct
+	public void init() {
+		watch=new StopWatch();
+		watch.setKeepTaskList(false);
+	}
+	
 
 }
